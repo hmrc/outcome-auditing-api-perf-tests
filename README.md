@@ -2,24 +2,28 @@
 
 # outcome-auditing-api-perf-tests
 
-Performance test suite for the `<digital service name>`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
+Performance test suite for the `outcome-auditing`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
 
 ## Pre-requisites
 
+Prior to executing the tests ensure you have:
+
+* Installed/configured service manager
+
 ### Services
+Run the following commands to start services locally:
 
-Start Mongo Docker container as follows:
-
-```bash
-docker run --rm -d --name mongo -d -p 27017:27017 mongo:4.0
-```
-
-Start `PLATFORM_EXAMPLE_UI_TESTS` services as follows:
-
-```bash
-sm --start PLATFORM_EXAMPLE_UI_TESTS -r --wait 100
-```
-
+    sm --start OUTCOME_AUDITING OUTCOME_AUDITING_PROXY --appendArgs '{
+        "OUTCOME_AUDITING_PROXY": [
+            "-J-Dmicroservice.services.access-control.enabled=true",
+            "-J-Dmicroservice.services.access-control.allow-list.1=test-user-agent"
+        ],
+        "OUTCOME_AUDITING": [
+            "-J-Dauditing.consumer.baseUri.port=6001",
+            "-J-Dauditing.consumer.baseUri.host=localhost",
+            "-J-Dauditing.enabled=true"
+        ]
+    }'
 ### Logging
 
 The default log level for all HTTP requests is set to `WARN`. Configure [logback.xml](src/test/resources/logback.xml) to update this if required.
