@@ -25,9 +25,9 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("outcome-auditing-proxy")
   val route: String   = "/report/outcome"
-  val ninoResponseMessage = "The nino outcome from outcome-auditing-proxy processed"
+  val responseMessage = "outcome from outcome-auditing-proxy,test-user-agent processed"
 
-  val checkOutcomeAuditing: HttpRequestBuilder =
+  val checkNinoOutcomeAuditing: HttpRequestBuilder =
     http("Check outcome auditing for a nino attribute")
       .post(s"$baseUrl$route")
       .header(HttpHeaderNames.ContentType, "application/json")
@@ -54,5 +54,34 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
       .asJson
       .check(status.is(200))
       .check(jsonPath("$.code").is("ok"))
-      .check(jsonPath("$.message").is(ninoResponseMessage))
+      .check(jsonPath("$.message").is(responseMessage))
+
+
+  val checkBankAccountOutcomeAuditing: HttpRequestBuilder =
+    http("Check outcome auditing for a nino attribute")
+      .post(s"$baseUrl$route")
+      .header(HttpHeaderNames.ContentType, "application/json")
+      .header(HttpHeaderNames.UserAgent, "test-user-agent")
+      .body(StringBody(
+        """{
+          |  "correlationId": "33df37a4-a535-41fe-8032-7ab718b45526",
+          |  "submitter": "ipp",
+          |  "submission": {
+          |    "submissionType": "bank-account",
+          |    "submissionAttribute": {
+          |      "sortCode": "608580",
+          |      "accountNumber": "48835625"
+          |    }
+          |  },
+          |  "outcome": {
+          |    "outcomeType": "insights",
+          |    "decision": "ACCEPTED",
+          |    "reasons": "Some reason"
+          |  }
+          |}""".stripMargin
+      ))
+      .asJson
+      .check(status.is(200))
+      .check(jsonPath("$.code").is("ok"))
+      .check(jsonPath("$.message").is(responseMessage))
 }
