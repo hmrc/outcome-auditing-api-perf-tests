@@ -25,7 +25,7 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("outcome-auditing-proxy")
   val route: String   = "/report/outcome"
-  val responseMessage = "outcome from outcome-auditing-proxy,test-user-agent processed"
+  val responseMessage = "outcome from outcome-auditing-proxy test-user-agent processed"
 
   val checkNinoOutcomeAuditing: HttpRequestBuilder =
     http("Check outcome auditing for a nino attribute")
