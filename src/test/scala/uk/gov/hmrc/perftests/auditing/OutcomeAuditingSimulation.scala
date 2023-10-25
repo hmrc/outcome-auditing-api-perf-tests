@@ -22,7 +22,7 @@ import OutcomeAuditingRequests._
 class OutcomeAuditingSimulation extends PerformanceTestRunner {
 
   setup("check-nino-outcome-auditing", "Check nino outcome Auditing API") withRequests checkNinoOutcomeAuditing
-  setup("check-bank-Account-outcome-auditing", "Check bank account outcome Auditing API") withRequests checkBankAccountOutcomeAuditing
+  setup("check-bank-account-outcome-auditing", "Check bank account outcome auditing API") withRequests checkBankAccountOutcomeAuditing
 
   runSimulation()
 }
