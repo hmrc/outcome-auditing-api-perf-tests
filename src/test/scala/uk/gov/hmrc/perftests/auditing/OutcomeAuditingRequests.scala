@@ -23,9 +23,9 @@ import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
 object OutcomeAuditingRequests extends ServicesConfiguration {
 
-  val baseUrl: String = baseUrlFor("outcome-auditing-proxy")
+  val baseUrl: String = baseUrlFor("outcome-auditing")
   val route: String   = "/report/outcome"
-  val responseMessage = "outcome from outcome-auditing-proxy test-user-agent processed"
+  val responseMessage = "outcome from test-user-agent processed"
 
   val checkNinoOutcomeAuditing: HttpRequestBuilder =
     http("Check outcome auditing for a nino attribute")
@@ -44,7 +44,7 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
           |    }
           |  },
           |  "outcome": {
-          |    "outcomeType": "insights",
+          |    "outcomeType": "Insights",
           |    "decision": "ACCEPTED",
           |    "reasons": "Some reason"
           |  }
@@ -74,7 +74,7 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
           |    }
           |  },
           |  "outcome": {
-          |    "outcomeType": "insights",
+          |    "outcomeType": "Insights",
           |    "decision": "ACCEPTED",
           |    "reasons": "Some reason"
           |  }
