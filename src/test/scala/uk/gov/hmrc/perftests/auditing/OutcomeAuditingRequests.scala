@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,10 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
     http("Check outcome auditing for a nino attribute")
       .post(s"$baseUrl$route")
       .header(HttpHeaderNames.ContentType, "application/json")
-      .header(HttpHeaderNames.UserAgent, "test-user-agent")
-      .body(StringBody(
-        """
+      .header(HttpHeaderNames.UserAgent, "test-only")
+      .body(
+        StringBody(
+          """
           |{
           |  "correlationId": "33df37a4-a535-41fe-8032-7ab718b45526",
           |  "submitter": "dfe",
@@ -46,24 +47,24 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
           |  "outcome": {
           |    "outcomeType": "Insights",
           |    "decision": "ACCEPTED",
-          |    "reasons": "Some reason"
+          |    "reasons": ["Some reason"]
           |  }
           |}
           |""".stripMargin
-      ))
+        )
+      )
       .asJson
       .check(status.is(200))
-      .check(jsonPath("$.code").is("ok"))
-      .check(jsonPath("$.message").is(responseMessage))
 
 
   val checkBankAccountOutcomeAuditing: HttpRequestBuilder =
     http("Check outcome auditing for a nino attribute")
       .post(s"$baseUrl$route")
       .header(HttpHeaderNames.ContentType, "application/json")
-      .header(HttpHeaderNames.UserAgent, "test-user-agent")
-      .body(StringBody(
-        """{
+      .header(HttpHeaderNames.UserAgent, "test-only")
+      .body(
+        StringBody(
+          """{
           |  "correlationId": "33df37a4-a535-41fe-8032-7ab718b45526",
           |  "submitter": "ipp",
           |  "submission": {
@@ -76,12 +77,12 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
           |  "outcome": {
           |    "outcomeType": "Insights",
           |    "decision": "ACCEPTED",
-          |    "reasons": "Some reason"
+          |    "reasons": ["Some reason"]
           |  }
           |}""".stripMargin
-      ))
+        )
+      )
       .asJson
       .check(status.is(200))
-      .check(jsonPath("$.code").is("ok"))
-      .check(jsonPath("$.message").is(responseMessage))
+      .check(bodyString.is(""))
 }
