@@ -1,5 +1,3 @@
-**This is a template README.md.  Be sure to update this with project specific content that describes your performance test project.**
-
 # outcome-auditing-api-perf-tests
 
 Performance test suite for the `outcome-auditing`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
@@ -13,7 +11,7 @@ Prior to executing the tests ensure you have:
 ### Services
 Run the following commands to start services locally:
 
-    sm --start OUTCOME_AUDITING --appendArgs '{
+    sm2 --start OUTCOME_AUDITING --appendArgs '{
         "OUTCOME_AUDITING": [
             "-J-Dauditing.consumer.baseUri.port=6001",
             "-J-Dauditing.consumer.baseUri.host=localhost",
