@@ -56,7 +56,6 @@ object OutcomeAuditingRequests extends ServicesConfiguration {
       .asJson
       .check(status.is(200))
 
-
   val checkBankAccountOutcomeAuditing: HttpRequestBuilder =
     http("Check outcome auditing for a nino attribute")
       .post(s"$baseUrl$route")

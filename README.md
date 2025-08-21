@@ -6,44 +6,40 @@ Performance test suite for the `outcome-auditing`, using [performance-test-runne
 
 Prior to executing the tests ensure you have:
 
-* Installed/configured service manager
+- Docker - to start MongoDB container
+- [Service Manager 2 (sm2)](https://github.com/hmrc/sm2) installed and configured
 
 ### Services
-Run the following commands to start services locally:
 
-    sm2 --start OUTCOME_AUDITING --appendArgs '{
-        "OUTCOME_AUDITING": [
-            "-J-Dauditing.consumer.baseUri.port=6001",
-            "-J-Dauditing.consumer.baseUri.host=localhost",
-            "-J-Dauditing.enabled=true"
-        ]
-    }'
-### Logging
+If you don't have Mongo running locally, then startup via Docker container as follows:
 
-The default log level for all HTTP requests is set to `WARN`. Configure [logback.xml](src/test/resources/logback.xml) to update this if required.
+```bash
+  docker run --restart unless-stopped --name mongodb -p 27017:27017 -d percona/percona-server-mongodb:7.0 --replSet rs0
+  docker exec -it mongodb mongosh --eval "rs.initiate();"
+````
+
+Start dependent microservices using the following shell script:
+```shell
+  ./start_services.sh
+```
+
+## Tests
 
 ### WARNING :warning:
 
 Do **NOT** run a full performance test against staging from your local machine. Please [implement a new performance test job](https://confluence.tools.tax.service.gov.uk/display/DTRG/Practical+guide+to+performance+testing+a+digital+service#Practicalguidetoperformancetestingadigitalservice-SettingupabuildonJenkinstorunagainsttheStagingenvironment) and execute your job from the dashboard in [Performance Jenkins](https://performance.tools.staging.tax.service.gov.uk).
 
-## Tests
+### Running local tests
 
-Run smoke test (locally) as follows:
-
-```bash
-sbt -Dperftest.runSmokeTest=true -DrunLocal=true gatling:test
+Run smoke test (locally) using the following shell script:
+```shell
+  ./run_tests.sh
 ```
 
-Run full performance test (locally) as follows:
+Run full performance test (locally) by passing the argument `false` to the script (to set `smoke` to `false`):
 
 ```bash
-sbt -DrunLocal=true gatling:test
-```
-
-Run smoke test (staging) as follows:
-
-```bash
-sbt -Dperftest.runSmokeTest=true -DrunLocal=false gatling:test
+  ./run_tests.sh false
 ```
 
 ## Scalafmt
@@ -65,6 +61,10 @@ Format all project files as follows:
 ```bash
 sbt scalafmtAll
 ```
+
+## Logging
+
+The default log level for all HTTP requests is set to `WARN`. Configure [logback.xml](src/test/resources/logback.xml) to update this if required.
 
 ## License
 
